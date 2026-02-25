@@ -81,7 +81,7 @@ class XAudioAudioSink : public SbAudioSinkPrivate {
                   SbAudioSinkUpdateSourceStatusFunc update_source_status_func,
                   ConsumeFramesFunc consume_frames_func,
                   void* context);
-  ~XAudioAudioSink() override{};
+  ~XAudioAudioSink() override {};
 
   void SetSourceVoice(IXAudio2SourceVoice* source_voice) {
     source_voice_ = source_voice;
