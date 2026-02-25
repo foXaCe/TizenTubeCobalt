@@ -67,11 +67,11 @@ TEST_F(TextEncoderTest, Encode) {
 
   std::string input;
   std::vector<uint8> want;
-  for (const auto &test : tests) {
+  for (const auto& test : tests) {
     std::tie(input, want) = test;
     script::Handle<script::Uint8Array> got =
         text_encoder_->Encode(stub_window_.environment_settings(), input);
-    auto *array_got = static_cast<uint8 *>(got->RawData());
+    auto* array_got = static_cast<uint8*>(got->RawData());
 
     // Compare the result against the expectations.
     ASSERT_EQ(got->Length(), want.size());
@@ -101,7 +101,7 @@ TEST_F(TextEncoderTest, EncodeInto) {
 
   Result want;
   std::string input;
-  for (const auto &test : tests) {
+  for (const auto& test : tests) {
     std::tie(input, want) = test;
     script::Handle<script::Uint8Array> destination = script::Uint8Array::New(
         stub_window_.global_environment(), want.bytes.size());
@@ -115,7 +115,7 @@ TEST_F(TextEncoderTest, EncodeInto) {
     EXPECT_EQ(want.written, got.written());
 
     // Verify the actual data.
-    auto *array_got = static_cast<uint8 *>(destination->RawData());
+    auto* array_got = static_cast<uint8*>(destination->RawData());
     ASSERT_LE(got.written(), want.bytes.size());
     for (uint32 i = 0; i < got.written(); ++i) {
       EXPECT_EQ(array_got[i], want.bytes[i]);
@@ -143,7 +143,7 @@ TEST_F(TextEncoderTest, EncodeIntoInsufficientCapacity) {
 
   Result want;
   std::string input;
-  for (const auto &test : tests) {
+  for (const auto& test : tests) {
     std::tie(input, want) = test;
     script::Handle<script::Uint8Array> destination = script::Uint8Array::New(
         stub_window_.global_environment(), want.bytes.size());
@@ -157,7 +157,7 @@ TEST_F(TextEncoderTest, EncodeIntoInsufficientCapacity) {
     EXPECT_EQ(want.written, got.written());
 
     // Verify the actual data.
-    auto *array_got = static_cast<uint8 *>(destination->RawData());
+    auto* array_got = static_cast<uint8*>(destination->RawData());
     ASSERT_LE(got.written(), want.bytes.size());
     for (uint32 i = 0; i < want.bytes.size(); ++i) {
       EXPECT_EQ(array_got[i], want.bytes[i]);
@@ -188,7 +188,7 @@ TEST_F(TextEncoderTest, EncodeIntoExtraCapacity) {
 
   Result want;
   std::string input;
-  for (const auto &test : tests) {
+  for (const auto& test : tests) {
     std::tie(input, want) = test;
     script::Handle<script::Uint8Array> destination = script::Uint8Array::New(
         stub_window_.global_environment(), want.bytes.size());
@@ -202,7 +202,7 @@ TEST_F(TextEncoderTest, EncodeIntoExtraCapacity) {
     EXPECT_EQ(want.written, got.written());
 
     // Verify the actual data.
-    auto *array_got = static_cast<uint8 *>(destination->RawData());
+    auto* array_got = static_cast<uint8*>(destination->RawData());
     ASSERT_LE(got.written(), want.bytes.size());
     for (uint32 i = 0; i < want.bytes.size(); ++i) {
       EXPECT_EQ(array_got[i], want.bytes[i]);
