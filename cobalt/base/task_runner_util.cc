@@ -38,13 +38,13 @@ const int kTimeWaitInterval = 2000;
 #endif
 }  // namespace
 
-void WaitForFence(base::SequencedTaskRunner *task_runner,
-                  const base::Location &from_here) {
+void WaitForFence(base::SequencedTaskRunner* task_runner,
+                  const base::Location& from_here) {
   PostBlockingTask(task_runner, from_here, base::OnceClosure());
 }
 
-void PostBlockingTask(base::SequencedTaskRunner *task_runner,
-                      const base::Location &from_here, base::OnceClosure task) {
+void PostBlockingTask(base::SequencedTaskRunner* task_runner,
+                      const base::Location& from_here, base::OnceClosure task) {
   TRACE_EVENT1("base::task_runner_util", __func__, "from_here",
                from_here.ToString());
   DCHECK(!task_runner->RunsTasksInCurrentSequence())
@@ -56,7 +56,7 @@ void PostBlockingTask(base::SequencedTaskRunner *task_runner,
       base::WaitableEvent::InitialState::NOT_SIGNALED);
 
   base::OnceClosure closure = base::BindOnce(
-      [](base::OnceClosure task, base::WaitableEvent *task_finished) -> void {
+      [](base::OnceClosure task, base::WaitableEvent* task_finished) -> void {
         if ((!task.is_null())) {
           std::move(task).Run();
         }
