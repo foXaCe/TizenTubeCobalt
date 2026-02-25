@@ -158,9 +158,9 @@ class ApplicationUwp : public shared::starboard::Application,
         ScopedLock lock(preferred_display_mode_mutex_);
         return preferred_display_mode_hdmi_;
       }
-      // clang-format on
+  // clang-format on
 
-      bool IsHdcpOn();
+  bool IsHdcpOn();
   // Returns true on success.
   bool TurnOnHdcp();
   // Returns true on success.
