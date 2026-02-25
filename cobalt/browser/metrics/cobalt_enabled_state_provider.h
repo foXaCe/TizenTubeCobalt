@@ -35,7 +35,7 @@ class CobaltEnabledStateProvider : public ::metrics::EnabledStateProvider {
   CobaltEnabledStateProvider& operator=(const CobaltEnabledStateProvider&) =
       delete;
 
-  ~CobaltEnabledStateProvider() override{};
+  ~CobaltEnabledStateProvider() override {};
 
   // Indicates user consent to collect and report metrics. In Cobalt, consent
   // is inherited through the web application, so this is usually true.

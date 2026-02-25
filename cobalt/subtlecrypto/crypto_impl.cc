@@ -28,19 +28,19 @@ namespace subtlecrypto {
 
 namespace {
 
-using EVP_Func = const EVP_MD *(*)(void);
+using EVP_Func = const EVP_MD* (*)(void);
 
-template <typename TCtx, size_t HashLen, EVP_Func evp_func,
-          int (*fInit)(TCtx *), int (*fUpdate)(TCtx *, const void *, size_t),
-          int (*fFinal)(unsigned char *, TCtx *)>
+template <typename TCtx, size_t HashLen, EVP_Func evp_func, int (*fInit)(TCtx*),
+          int (*fUpdate)(TCtx*, const void*, size_t),
+          int (*fFinal)(unsigned char*, TCtx*)>
 class HashImpl : public Hash {
   TCtx ctx;
 
  public:
   HashImpl() { fInit(&ctx); }
-  void Update(const ByteVector &data) override {
+  void Update(const ByteVector& data) override {
     if (!data.empty()) {
-      fUpdate(&ctx, static_cast<const unsigned char *>(data.data()),
+      fUpdate(&ctx, static_cast<const unsigned char*>(data.data()),
               data.size());
     }
   }
@@ -49,8 +49,8 @@ class HashImpl : public Hash {
     fFinal(out.data(), &ctx);
     return out;
   }
-  ByteVector CalculateHMAC(const ByteVector &data,
-                           const ByteVector &key) override {
+  ByteVector CalculateHMAC(const ByteVector& data,
+                           const ByteVector& key) override {
     ByteVector ret(HashLen);
     unsigned int ret_len = static_cast<unsigned int>(ret.size());
     auto result = HMAC(evp_func(), key.data(), key.size(), data.data(),
@@ -74,7 +74,7 @@ using HashPtr = std::unique_ptr<Hash>;
 
 }  // namespace
 
-std::unique_ptr<Hash> Hash::CreateByName(const std::string &name) {
+std::unique_ptr<Hash> Hash::CreateByName(const std::string& name) {
   std::string tmp_name(name);
   transform(tmp_name.begin(), tmp_name.end(), tmp_name.begin(), ::toupper);
   if (tmp_name == "SHA-1") return std::make_unique<Sha1Hash>();
@@ -84,11 +84,11 @@ std::unique_ptr<Hash> Hash::CreateByName(const std::string &name) {
   return nullptr;
 }
 
-ByteVector CalculateAES_CTR(const ByteVector &data, const ByteVector &key,
-                            const ByteVector &iv) {
-  EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+ByteVector CalculateAES_CTR(const ByteVector& data, const ByteVector& key,
+                            const ByteVector& iv) {
+  EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
   DCHECK(ctx);
-  auto error = [&ctx](const char *msg) -> ByteVector {
+  auto error = [&ctx](const char* msg) -> ByteVector {
     DLOG(ERROR) << msg;
     EVP_CIPHER_CTX_free(ctx);
     return {};
@@ -97,7 +97,7 @@ ByteVector CalculateAES_CTR(const ByteVector &data, const ByteVector &key,
   if (iv.size() != 16) {
     return error("Invalid initialization vector size, AES requires 128-bit IV");
   }
-  const char *algo = nullptr;
+  const char* algo = nullptr;
   switch (key.size()) {
     case 16:
       algo = "aes-128-ctr";
