@@ -21,7 +21,7 @@ namespace cssom {
 TEST(CSSStylePropertyDefinitionsTest,
      PropertiesHaveALowerCaseCSSIdentifierName) {
   for (int key = 0; key < kMaxEveryPropertyKey + 1; ++key) {
-    const char *name = GetPropertyName(static_cast<PropertyKey>(key));
+    const char* name = GetPropertyName(static_cast<PropertyKey>(key));
     ASSERT_TRUE(name);
     do {
       ASSERT_TRUE((*name >= 'a' && *name <= 'z') || *name == '-');
@@ -31,7 +31,7 @@ TEST(CSSStylePropertyDefinitionsTest,
 
 TEST(CSSStylePropertyDefinitionsTest, LongHandPropertiesHaveAnInitialValue) {
   for (int key = 0; key < kNumLonghandProperties; ++key) {
-    const scoped_refptr<PropertyValue> &initial_value =
+    const scoped_refptr<PropertyValue>& initial_value =
         GetPropertyInitialValue(static_cast<PropertyKey>(key));
     ASSERT_TRUE(initial_value);
   }
@@ -39,7 +39,7 @@ TEST(CSSStylePropertyDefinitionsTest, LongHandPropertiesHaveAnInitialValue) {
 
 TEST(CSSStylePropertyDefinitionsTest, LongHandPropertiesKeyLookup) {
   for (int key = 0; key < kNumLonghandProperties; ++key) {
-    const char *name = GetPropertyName(static_cast<PropertyKey>(key));
+    const char* name = GetPropertyName(static_cast<PropertyKey>(key));
     ASSERT_TRUE(name);
     PropertyKey looked_up_key = GetPropertyKey(name);
     ASSERT_NE(looked_up_key, kNoneProperty);
@@ -51,7 +51,7 @@ TEST(CSSStylePropertyDefinitionsTest, LongHandPropertiesKeyLookup) {
 TEST(CSSStylePropertyDefinitionsTest, ShortHandPropertiesKeyLookup) {
   for (int key = kFirstShorthandPropertyKey; key < kMaxShorthandPropertyKey + 1;
        ++key) {
-    const char *name = GetPropertyName(static_cast<PropertyKey>(key));
+    const char* name = GetPropertyName(static_cast<PropertyKey>(key));
     ASSERT_TRUE(name);
     PropertyKey looked_up_key = GetPropertyKey(name);
     ASSERT_NE(looked_up_key, kNoneProperty);
