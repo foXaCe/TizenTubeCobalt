@@ -29,19 +29,19 @@ class Hash {
  public:
   virtual ~Hash() {}
   // Hash input data
-  virtual void Update(const ByteVector &data) = 0;
+  virtual void Update(const ByteVector& data) = 0;
   // Finish hash, output is hash-length vector
   virtual ByteVector Finish() = 0;
   // Calculate HMAC with given key
-  virtual ByteVector CalculateHMAC(const ByteVector &data,
-                                   const ByteVector &key) = 0;
-  static std::unique_ptr<Hash> CreateByName(const std::string &name);
+  virtual ByteVector CalculateHMAC(const ByteVector& data,
+                                   const ByteVector& key) = 0;
+  static std::unique_ptr<Hash> CreateByName(const std::string& name);
 };
 
 // Calculate AES-CTR, selecting the correct algorithm based on |key| length.
 // Returns an empty vector in case of failure.
-ByteVector CalculateAES_CTR(const ByteVector &data, const ByteVector &key,
-                            const ByteVector &iv);
+ByteVector CalculateAES_CTR(const ByteVector& data, const ByteVector& key,
+                            const ByteVector& iv);
 
 }  // namespace subtlecrypto
 }  // namespace cobalt
