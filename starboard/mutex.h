@@ -47,7 +47,8 @@ typedef union SbMutex {
 
 #ifdef __cplusplus
 #define SB_MUTEX_INITIALIZER \
-  {}
+  {                          \
+  }
 #else
 #define SB_MUTEX_INITIALIZER {0}
 #endif
