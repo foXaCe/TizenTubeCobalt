@@ -22,10 +22,10 @@
 namespace base {
 namespace task_runner_util {
 
-void WaitForFence(base::SequencedTaskRunner *task_runner,
-                  const base::Location &from_here);
-void PostBlockingTask(base::SequencedTaskRunner *task_runner,
-                      const base::Location &from_here, base::OnceClosure task);
+void WaitForFence(base::SequencedTaskRunner* task_runner,
+                  const base::Location& from_here);
+void PostBlockingTask(base::SequencedTaskRunner* task_runner,
+                      const base::Location& from_here, base::OnceClosure task);
 
 }  // namespace task_runner_util
 }  // namespace base
