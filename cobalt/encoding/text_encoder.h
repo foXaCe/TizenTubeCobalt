@@ -32,12 +32,12 @@ class TextEncoder : public script::Wrappable {
 
   std::string encoding() { return KEncoding; }
 
-  script::Handle<script::Uint8Array> Encode(script::EnvironmentSettings *);
-  script::Handle<script::Uint8Array> Encode(script::EnvironmentSettings *,
-                                            const std::string &);
+  script::Handle<script::Uint8Array> Encode(script::EnvironmentSettings*);
+  script::Handle<script::Uint8Array> Encode(script::EnvironmentSettings*,
+                                            const std::string&);
   TextEncoderEncodeIntoResult EncodeInto(
-      script::EnvironmentSettings *, const std::string &,
-      const script::Handle<script::Uint8Array> &);
+      script::EnvironmentSettings*, const std::string&,
+      const script::Handle<script::Uint8Array>&);
 
   DEFINE_WRAPPABLE_TYPE(TextEncoder);
 
