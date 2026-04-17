@@ -28,19 +28,19 @@ namespace subtlecrypto {
 
 namespace {
 
-const ByteVector to_vector(const web::BufferSource &data) {
-  const uint8_t *buff;
+const ByteVector to_vector(const web::BufferSource& data) {
+  const uint8_t* buff;
   int buf_len;
   web::GetBufferAndSize(data, &buff, &buf_len);
   return ByteVector(buff, buff + buf_len);
 }
 
-std::string algo_name(const Algorithm &algo) {
+std::string algo_name(const Algorithm& algo) {
   return algo.has_name() ? algo.name() : "";
 }
 
 template <typename T, typename W>
-std::string get_name(const W &algorithm) {
+std::string get_name(const W& algorithm) {
   if (algorithm.template IsType<T>()) {
     return algo_name(algorithm.template AsType<T>());
   }
@@ -49,7 +49,7 @@ std::string get_name(const W &algorithm) {
 }
 
 template <typename T = Algorithm, typename W>
-std::string get_name_or_string(const W &algorithm) {
+std::string get_name_or_string(const W& algorithm) {
   if (algorithm.template IsType<T>()) {
     return algo_name(algorithm.template AsType<T>());
   }
@@ -57,19 +57,19 @@ std::string get_name_or_string(const W &algorithm) {
 }
 
 template <typename Promise>
-Promise reject(Promise &&promise,
-               const scoped_refptr<script::ScriptException> &result) {
+Promise reject(Promise&& promise,
+               const scoped_refptr<script::ScriptException>& result) {
   promise->Reject(result);
   return promise;
 }
 
 template <typename Promise>
-Promise reject(Promise &&promise, web::DOMException::ExceptionCode error) {
+Promise reject(Promise&& promise, web::DOMException::ExceptionCode error) {
   return reject(promise, new web::DOMException(error));
 }
 
 template <typename Promise>
-Promise reject(Promise &&promise, const std::string &dom_error) {
+Promise reject(Promise&& promise, const std::string& dom_error) {
   return reject(promise, new web::DOMException(dom_error, dom_error));
 }
 
@@ -79,9 +79,9 @@ using PromiseBool = SubtleCrypto::PromiseBool;
 using PromiseArray = SubtleCrypto::PromiseArray;
 using PromiseWrappable = SubtleCrypto::PromiseWrappable;
 
-SubtleCrypto::SubtleCrypto(script::EnvironmentSettings *environment) {
+SubtleCrypto::SubtleCrypto(script::EnvironmentSettings* environment) {
   global_env_ =
-      base::polymorphic_downcast<web::EnvironmentSettings *>(environment)
+      base::polymorphic_downcast<web::EnvironmentSettings*>(environment)
           ->context()
           ->global_environment();
   script_value_factory_ = global_env_->script_value_factory();
@@ -95,7 +95,7 @@ PromiseWrappable SubtleCrypto::CreateKeyPromise() {
       ->CreateInterfacePromise<scoped_refptr<CryptoKeyPtr>>();
 }
 
-web::BufferSource SubtleCrypto::CreateBufferSource(const ByteVector &input) {
+web::BufferSource SubtleCrypto::CreateBufferSource(const ByteVector& input) {
   DCHECK(global_env_);
   auto arrayBuffer =
       script::ArrayBuffer::New(global_env_, input.data(), input.size());
@@ -103,8 +103,8 @@ web::BufferSource SubtleCrypto::CreateBufferSource(const ByteVector &input) {
 }
 
 PromiseArray SubtleCrypto::Decrypt(EncryptionAlgorithm algorithm,
-                                   const CryptoKeyPtr &key,
-                                   const web::BufferSource &data) {
+                                   const CryptoKeyPtr& key,
+                                   const web::BufferSource& data) {
   // 1. Let algorithm and key be the algorithm and key parameters passed to the
   // decrypt method, respectively.
   // 2. Let data be the result of getting a copy of the bytes held by the data
@@ -162,8 +162,8 @@ PromiseArray SubtleCrypto::Decrypt(EncryptionAlgorithm algorithm,
 // TODO: Consider sharing the implementation with Decrypt, as the flow is
 // very similar for symmetric algos.
 PromiseArray SubtleCrypto::Encrypt(EncryptionAlgorithm algorithm,
-                                   const CryptoKeyPtr &key,
-                                   const web::BufferSource &data) {
+                                   const CryptoKeyPtr& key,
+                                   const web::BufferSource& data) {
   // 1. Let algorithm and key be the algorithm and key parameters passed to the
   // encrypt method, respectively.
   // 2. Let data be the result of getting a copy of the bytes held by the data
@@ -219,8 +219,8 @@ PromiseArray SubtleCrypto::Encrypt(EncryptionAlgorithm algorithm,
 }
 
 PromiseArray SubtleCrypto::Sign(AlgorithmIdentifier algorithm,
-                                const CryptoKeyPtr &key,
-                                const web::BufferSource &data) {
+                                const CryptoKeyPtr& key,
+                                const web::BufferSource& data) {
   // 1. Let algorithm and key be the algorithm and key parameters passed to the
   // sign method, respectively.
   // 2. Let data be the result of getting a copy of the bytes held by the data
@@ -252,9 +252,9 @@ PromiseArray SubtleCrypto::Sign(AlgorithmIdentifier algorithm,
 }
 
 PromiseBool SubtleCrypto::Verify(AlgorithmIdentifier algorithm,
-                                 const CryptoKeyPtr &key,
-                                 const web::BufferSource &signature,
-                                 const web::BufferSource &data) {
+                                 const CryptoKeyPtr& key,
+                                 const web::BufferSource& signature,
+                                 const web::BufferSource& data) {
   // 1. Let algorithm and key be the algorithm and key parameters passed to the
   // verify method, respectively.
   // 2. Let signature be the result of getting a copy of the bytes held by the
@@ -290,7 +290,7 @@ PromiseBool SubtleCrypto::Verify(AlgorithmIdentifier algorithm,
 }
 
 PromiseArray SubtleCrypto::Digest(AlgorithmIdentifier algorithm,
-                                  const web::BufferSource &data) {
+                                  const web::BufferSource& data) {
   // 1. Let algorithm be the algorithm parameter passed to the digest method.
   // 2. Let data be the result of getting a copy of the bytes held by the data
   // parameter passed to the digest method.
@@ -317,31 +317,31 @@ PromiseArray SubtleCrypto::Digest(AlgorithmIdentifier algorithm,
 
 PromiseArray SubtleCrypto::GenerateKey(AlgorithmIdentifier algorithm,
                                        bool extractable,
-                                       const KeyUsages &keyUsages) {
+                                       const KeyUsages& keyUsages) {
   NOTIMPLEMENTED();
   return reject(CreatePromise(), web::DOMException::kNotSupportedErr);
 }
 
 PromiseArray SubtleCrypto::DeriveKey(AlgorithmIdentifier algorithm,
-                                     const CryptoKeyPtr &key,
+                                     const CryptoKeyPtr& key,
                                      AlgorithmIdentifier derivedKeyType,
                                      bool extractable,
-                                     const KeyUsages &keyUsages) {
+                                     const KeyUsages& keyUsages) {
   NOTIMPLEMENTED();
   return reject(CreatePromise(), web::DOMException::kNotSupportedErr);
 }
 
 PromiseArray SubtleCrypto::DeriveBits(AlgorithmIdentifier algorithm,
-                                      const CryptoKeyPtr &key,
+                                      const CryptoKeyPtr& key,
                                       const uint32_t length) {
   NOTIMPLEMENTED();
   return reject(CreatePromise(), web::DOMException::kNotSupportedErr);
 }
 
 PromiseWrappable SubtleCrypto::ImportKey(
-    KeyFormat format, const web::BufferSource &keyData,
+    KeyFormat format, const web::BufferSource& keyData,
     script::UnionType2<ImportKeyAlgorithmParams, std::string> algorithm,
-    bool extractable, const KeyUsages &keyUsages) {
+    bool extractable, const KeyUsages& keyUsages) {
   // 1. Let format, algorithm, extractable and usages, be the format, algorithm,
   // extractable and keyUsages parameters passed to the importKey method,
   // respectively.
@@ -392,23 +392,23 @@ PromiseWrappable SubtleCrypto::ImportKey(
 }
 
 PromiseArray SubtleCrypto::ExportKey(KeyFormat format,
-                                     const CryptoKeyPtr &key) {
+                                     const CryptoKeyPtr& key) {
   NOTIMPLEMENTED();
   return reject(CreatePromise(), web::DOMException::kNotSupportedErr);
 }
 
-PromiseArray SubtleCrypto::WrapKey(KeyFormat format, const CryptoKeyPtr &key,
-                                   const CryptoKeyPtr &wrappingKey,
+PromiseArray SubtleCrypto::WrapKey(KeyFormat format, const CryptoKeyPtr& key,
+                                   const CryptoKeyPtr& wrappingKey,
                                    AlgorithmIdentifier algorithm) {
   NOTIMPLEMENTED();
   return reject(CreatePromise(), web::DOMException::kNotSupportedErr);
 }
 
 PromiseWrappable SubtleCrypto::UnwrapKey(
-    KeyFormat format, const web::BufferSource &wrappedKey,
-    const CryptoKeyPtr &unwrappingKey, AlgorithmIdentifier unwrapAlgorithm,
+    KeyFormat format, const web::BufferSource& wrappedKey,
+    const CryptoKeyPtr& unwrappingKey, AlgorithmIdentifier unwrapAlgorithm,
     AlgorithmIdentifier unwrappedKeyAlgorithm, bool extractacble,
-    const KeyUsages &keyUsages) {
+    const KeyUsages& keyUsages) {
   NOTIMPLEMENTED();
   return reject(CreateKeyPromise(), web::DOMException::kNotSupportedErr);
 }
