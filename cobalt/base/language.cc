@@ -39,9 +39,8 @@ std::string GetSystemLanguage() {
   if (U_SUCCESS(icu_result) && buffer[0]) {
     // Montenegro uses the Latin alphabet.
     // Needs to be forced, as not all platforms know it.
-    assert (sizeof(buffer) > 7); // sizeof("Latn-ME")
-    if (strcmp(buffer, "ME") == 0)
-      strncpy(buffer, "Latn-ME", sizeof(buffer));
+    assert(sizeof(buffer) > 7);  // sizeof("Latn-ME")
+    if (strcmp(buffer, "ME") == 0) strncpy(buffer, "Latn-ME", sizeof(buffer));
     language += "-";
     language += buffer;
   }

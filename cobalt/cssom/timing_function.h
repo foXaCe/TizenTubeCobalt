@@ -119,7 +119,7 @@ class SteppingTimingFunction : public TimingFunction {
   DEFINE_POLYMORPHIC_EQUATABLE_TYPE(SteppingTimingFunction);
 
  protected:
-  ~SteppingTimingFunction() override{};
+  ~SteppingTimingFunction() override {};
 
  private:
   int number_of_steps_;
