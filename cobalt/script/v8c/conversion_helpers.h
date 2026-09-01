@@ -64,14 +64,14 @@ enum ConversionFlags {
 
   // Valid conversion flags for string types.
   kConversionFlagsString = kConversionFlagTreatNullAsEmptyString |
-                           kConversionFlagTreatUndefinedAsEmptyString,
+      kConversionFlagTreatUndefinedAsEmptyString,
 
   // Valid conversion flags for objects.
   kConversionFlagsObject = kConversionFlagNullable,
 
   // Valid conversion flags for ValueHandles.
-  kConversionFlagsValueHandle =
-      kConversionFlagObjectOnly | kConversionFlagNullable,
+  kConversionFlagsValueHandle = kConversionFlagObjectOnly |
+      kConversionFlagNullable,
 
   // Valid conversion flags for callback functions.
   kConversionFlagsCallbackFunction = kConversionFlagNullable,
