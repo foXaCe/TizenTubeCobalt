@@ -91,10 +91,10 @@ public final class CommandLineOverrideHelper {
     // It is important to use a feature override instead of the
     // rendering switch, to make sure certain devices are excluded.
     paramOverrides.add("DefaultPassthroughCommandDecoder");
-    // Compositor switch to reduce prepaint tile cache size
-    paramOverrides.add("SmallerInterestArea");
-    paramOverrides.add("ReclaimPrepaintTilesWhenIdle");
-    paramOverrides.add("ReclaimOldPrepaintTiles");
+    // TizenTube: prepaint tile cache reduction (SmallerInterestArea,
+    // ReclaimPrepaintTilesWhenIdle, ReclaimOldPrepaintTiles) is not enabled.
+    // With a 500px interest area, tiles are not painted ahead of time and
+    // show up blank or late while scrolling the 4K UI.
     paramOverrides.add("WebAudioRemoveAudioDestinationResampler");
 
     return paramOverrides;
