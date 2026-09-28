@@ -1,0 +1,149 @@
+# Builds the TizenTube Cobalt APK on GitHub-hosted runners.
+#
+# A full build does not fit in the 6 h job limit. Each run compiles for up to
+# 5 h 30, keeps the sccache cache, and stops; re-run the workflow until the
+# APK artifact appears.
+#
+# The APK is signed with the TIZENTUBE_KEYSTORE_B64 secret. When
+# TEST_PACKAGE is true, it is installed as io.gh.reisxd.tizentube.cobalt.test,
+# next to the released app.
+
+name: tizentube_apk
+
+on:
+  push:
+    branches:
+      - 'sync/**'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  PLATFORM: android-arm64
+  CONFIG: gold
+  TEST_PACKAGE: 'true'
+  DEPOT_TOOLS_UPDATE: 0
+  DEPOT_TOOLS_REPORT_BUILD: 0
+  DEPOT_TOOLS_COLLECT_METRICS: 0
+  DEPOT_TOOLS_METRICS: 0
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    strategy:
+      matrix:
+        platform: [android-arm64]
+    steps:
+      - name: Free disk space
+        shell: bash
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+            /opt/hostedtoolcache/CodeQL /usr/local/share/boost \
+            /usr/local/.ghcup /usr/share/swift
+          sudo docker image prune --all --force || true
+          df -h /
+
+      - name: Restore CI Essentials
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          sparse-checkout: |
+            .github
+            cobalt/build
+
+      - name: Checkout
+        uses: ./.github/actions/checkout
+        with:
+          path: cobalt/src
+          ref: ${{ github.sha }}
+          fetch_depth: 1
+          use_cache: false
+
+      - name: Set Up Depot Tools
+        uses: ./.github/actions/depot_tools
+        with:
+          use_cache: false
+
+      - name: Install build dependencies
+        shell: bash
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y default-jre-headless gperf
+          curl -fsSL https://github.com/mozilla/sccache/releases/download/v0.8.1/sccache-v0.8.1-x86_64-unknown-linux-musl.tar.gz \
+            | tar -xz
+          sudo mv sccache-v0.8.1-x86_64-unknown-linux-musl/sccache /usr/local/bin/
+          sccache --version
+
+      - name: Restore sccache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/sccache
+          key: sccache-${{ env.PLATFORM }}-${{ env.CONFIG }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            sccache-${{ env.PLATFORM }}-${{ env.CONFIG }}-
+
+      - name: Prepare signing and package name
+        shell: bash
+        env:
+          KEYSTORE_B64: ${{ secrets.TIZENTUBE_KEYSTORE_B64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.TIZENTUBE_KEYSTORE_PASSWORD }}
+        run: |
+          set -e
+          if [[ -z "${KEYSTORE_B64}" || -z "${KEYSTORE_PASSWORD}" ]]; then
+            echo "::error::TIZENTUBE_KEYSTORE_B64 and TIZENTUBE_KEYSTORE_PASSWORD secrets are required."
+            exit 1
+          fi
+          echo "${KEYSTORE_B64}" | base64 -d > "${RUNNER_TEMP}/tizentube.keystore"
+          cd cobalt/src
+          sed -i \
+            -e "s|keystore_path = .*|keystore_path = \"${RUNNER_TEMP}/tizentube.keystore\"|" \
+            -e 's|keystore_name = .*|keystore_name = "tizentube"|' \
+            -e "s|keystore_password = .*|keystore_password = \"${KEYSTORE_PASSWORD}\"|" \
+            cobalt/android/BUILD.gn
+          if [[ "${TEST_PACKAGE}" == "true" ]]; then
+            sed -i 's|manifest_package=io.gh.reisxd.tizentube.cobalt"|manifest_package=io.gh.reisxd.tizentube.cobalt.test"|' \
+              cobalt/android/BUILD.gn
+          fi
+          grep -n "manifest_package\|keystore_name" cobalt/android/BUILD.gn
+
+      - name: GN gen
+        shell: bash
+        run: |
+          cd cobalt/src
+          cobalt/build/gn.py -p "${PLATFORM}" -C "${CONFIG}" --no-rbe --use-sccache
+          echo 'use_siso = false' >> "out/${PLATFORM}_${CONFIG}/args.gn"
+          echo 'use_remoteexec = false' >> "out/${PLATFORM}_${CONFIG}/args.gn"
+          gn gen "out/${PLATFORM}_${CONFIG}"
+
+      - name: Ninja build
+        id: ninja
+        shell: bash
+        run: |
+          cd cobalt/src
+          export SCCACHE_DIR=~/.cache/sccache
+          export SCCACHE_CACHE_SIZE=9G
+          set +e
+          timeout 280m autoninja -j "$(nproc)" -C "out/${PLATFORM}_${CONFIG}" cobalt/android:cobalt_apk
+          code=$?
+          set -e
+          sccache --show-stats || true
+          if [[ ${code} -eq 124 ]]; then
+            echo "Time budget reached. Re-run this workflow to continue from the cache."
+            echo "complete=false" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+          if [[ ${code} -ne 0 ]]; then
+            exit ${code}
+          fi
+          echo "complete=true" >> "${GITHUB_OUTPUT}"
+          ls -la "out/${PLATFORM}_${CONFIG}/apks/"
+
+      - name: Upload APK
+        if: steps.ninja.outputs.complete == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: tizentube-${{ env.PLATFORM }}-${{ env.CONFIG }}
+          path: cobalt/src/out/${{ env.PLATFORM }}_${{ env.CONFIG }}/apks/*.apk
