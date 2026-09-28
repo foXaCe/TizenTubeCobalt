@@ -54,7 +54,7 @@ class CapabilityReader {
                    base::Value::Dict* capabilities_value)
       : capabilities_(capabilities), capabilities_value_(capabilities_value) {}
 
-  template <base::Optional<std::string> Capabilities::*member>
+  template <base::Optional<std::string> Capabilities::* member>
   void TryReadCapability(const char* key) {
     std::string* value = capabilities_value_->FindString(key);
     if (value) {
@@ -64,7 +64,7 @@ class CapabilityReader {
     }
   }
 
-  template <base::Optional<bool> Capabilities::*member>
+  template <base::Optional<bool> Capabilities::* member>
   void TryReadCapability(const char* key) {
     absl::optional<bool> value = capabilities_value_->FindBool(key);
     if (value.has_value()) {
@@ -74,7 +74,7 @@ class CapabilityReader {
     }
   }
 
-  template <typename T, base::Optional<T> Capabilities::*member>
+  template <typename T, base::Optional<T> Capabilities::* member>
   void TryReadCapability(const char* key) {
     const base::Value* dictionary_value = capabilities_value_->Find(key);
     if (dictionary_value) {
@@ -97,14 +97,14 @@ class CapabilityWriter {
                    base::Value::Dict* capabilities_value)
       : capabilities_(capabilities), capabilities_value_(capabilities_value) {}
 
-  template <base::Optional<std::string> Capabilities::*member>
+  template <base::Optional<std::string> Capabilities::* member>
   void TryWriteCapability(const char* key) {
     if (capabilities_.*member) {
       capabilities_value_->Set(key, (capabilities_.*member).value_or(""));
     }
   }
 
-  template <base::Optional<bool> Capabilities::*member>
+  template <base::Optional<bool> Capabilities::* member>
   void TryWriteCapability(const char* key) {
     if (capabilities_.*member) {
       capabilities_value_->Set(key, (capabilities_.*member).value_or(false));

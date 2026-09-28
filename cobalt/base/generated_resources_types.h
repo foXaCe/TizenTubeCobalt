@@ -21,9 +21,9 @@
 
 struct FileContents {
   FileContents() {}
-  FileContents(const unsigned char *data, int size) : data(data), size(size) {}
+  FileContents(const unsigned char* data, int size) : data(data), size(size) {}
 
-  const unsigned char *data;
+  const unsigned char* data;
   int size;
 };
 

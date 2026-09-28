@@ -77,7 +77,7 @@ void ApplicationDispmanx::Teardown() {
   SbAudioSinkPrivate::TearDown();
 }
 
-void ApplicationDispmanx ::OnSuspend() {
+void ApplicationDispmanx::OnSuspend() {
   // |window_| has not been initialized if Cobalt is in a preloaded state.
   if (window_) {
     video_renderer_->HideElement();

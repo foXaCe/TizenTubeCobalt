@@ -62,8 +62,8 @@ typedef enum SbMemoryMapFlags {
   kSbMemoryMapProtectRead = 1 << 0,   // Mapped memory can be read.
   kSbMemoryMapProtectWrite = 1 << 1,  // Mapped memory can be written to.
   kSbMemoryMapProtectExec = 1 << 2,   // Mapped memory can be executed.
-  kSbMemoryMapProtectReadWrite =
-      kSbMemoryMapProtectRead | kSbMemoryMapProtectWrite,
+  kSbMemoryMapProtectReadWrite = kSbMemoryMapProtectRead |
+      kSbMemoryMapProtectWrite,
 } SbMemoryMapFlags;
 
 #if SB_API_VERSION < 16

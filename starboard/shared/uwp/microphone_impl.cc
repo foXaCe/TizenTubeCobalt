@@ -167,21 +167,20 @@ std::vector<DeviceInformation ^> GetAllMicrophoneDevices() {
   return output;
 }
 
-AudioGraph ^
-    CreateAudioGraph(AudioRenderCategory category,
-                     QuantumSizeSelectionMode selection_mode) {
-      AudioGraphSettings ^ settings = ref new AudioGraphSettings(category);
-      settings->QuantumSizeSelectionMode = selection_mode;
-      CreateAudioGraphResult ^ result = starboard::shared::uwp::WaitForResult(
-          AudioGraph::CreateAsync(settings));
-      SB_DCHECK(result->Status == AudioGraphCreationStatus::Success);
-      AudioGraph ^ graph = result->Graph;
-      return graph;
-    } std::
-        vector<AudioDeviceInputNode ^> GenerateAudioInputNodes(
-            const std::vector<DeviceInformation ^>& microphone_devices,
-            AudioEncodingProperties ^ encoding_properties,
-            AudioGraph ^ graph) {
+AudioGraph ^ CreateAudioGraph(AudioRenderCategory category,
+                              QuantumSizeSelectionMode selection_mode) {
+  AudioGraphSettings ^ settings = ref new AudioGraphSettings(category);
+  settings->QuantumSizeSelectionMode = selection_mode;
+  CreateAudioGraphResult ^ result =
+      starboard::shared::uwp::WaitForResult(AudioGraph::CreateAsync(settings));
+  SB_DCHECK(result->Status == AudioGraphCreationStatus::Success);
+  AudioGraph ^ graph = result->Graph;
+  return graph;
+}
+std::vector<AudioDeviceInputNode ^> GenerateAudioInputNodes(
+    const std::vector<DeviceInformation ^>& microphone_devices,
+    AudioEncodingProperties ^ encoding_properties,
+    AudioGraph ^ graph) {
   std::vector<AudioDeviceInputNode ^> output;
 
   int64_t start_time = starboard::CurrentMonotonicTime();

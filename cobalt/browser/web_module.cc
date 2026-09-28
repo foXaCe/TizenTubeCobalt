@@ -1371,15 +1371,15 @@ void WebModule::InitializeTaskInThread(const ConstructionData& data,
 
 // Ensure that we are on the WebModule thread where we can dereference impl_.
 // Post a task to the given function if we are not.
-#define POST_TO_ENSURE_IMPL_ON_THREAD(location, function, ...)             \
-  DCHECK(task_runner());                                                   \
-  if (base::SequencedTaskRunner::GetCurrentDefault() != task_runner()) {   \
-    task_runner()->PostTask(                                               \
-        location, base::Bind(&WebModule::function, base::Unretained(this), \
-                             ##__VA_ARGS__));                              \
-    return;                                                                \
-  } else {                                                                 \
-    DCHECK(impl_);                                                         \
+#define POST_TO_ENSURE_IMPL_ON_THREAD(location, function, ...)           \
+  DCHECK(task_runner());                                                 \
+  if (base::SequencedTaskRunner::GetCurrentDefault() != task_runner()) { \
+    task_runner()->PostTask(                                             \
+        location, base::Bind(&WebModule::function,                       \
+                             base::Unretained(this), ##__VA_ARGS__));    \
+    return;                                                              \
+  } else {                                                               \
+    DCHECK(impl_);                                                       \
   }
 
 // Ensure that we are on the WebModule thread where we can dereference impl_.
@@ -1402,8 +1402,8 @@ void WebModule::InitializeTaskInThread(const ConstructionData& data,
   if (base::SequencedTaskRunner::GetCurrentDefault() != task_runner()) { \
     base::task_runner_util::PostBlockingTask(                            \
         task_runner(), location,                                         \
-        base::Bind(&WebModule::function, base::Unretained(this),         \
-                   ##__VA_ARGS__));                                      \
+        base::Bind(&WebModule::function,                                 \
+                   base::Unretained(this), ##__VA_ARGS__));              \
     return;                                                              \
   } else {                                                               \
     DCHECK(impl_);                                                       \

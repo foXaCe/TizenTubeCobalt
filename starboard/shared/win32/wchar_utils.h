@@ -48,9 +48,8 @@ inline std::string platformStringToString(Platform::String ^ to_convert) {
 
 inline Platform::String ^
     stringToPlatformString(const std::string& to_convert) {
-      return ref new Platform::String(
-          CStringToWString(to_convert.c_str()).c_str());
-    }
+  return ref new Platform::String(CStringToWString(to_convert.c_str()).c_str());
+}
 #endif
 
 }  // namespace win32

@@ -16,23 +16,23 @@
 #define STARBOARD_NPLB_TESTCASE_HELPERS_H_
 
 #include <string.h>
-#include "starboard/system.h"
 #include "starboard/common/log.h"
+#include "starboard/system.h"
 
 namespace starboard {
 namespace nplb {
 
 typedef enum PlatformType {
-    kPlatformTypeLinux,
-    kPlatformTypeAndroid,
-    kPlatformTypeUnknown
+  kPlatformTypeLinux,
+  kPlatformTypeAndroid,
+  kPlatformTypeUnknown
 } PlatformType;
 
 static PlatformType runtimePlatformType = PlatformType::kPlatformTypeUnknown;
 
 static inline PlatformType GetRuntimePlatform() {
   if (runtimePlatformType != PlatformType::kPlatformTypeUnknown) {
-      return runtimePlatformType;
+    return runtimePlatformType;
   }
 
   // Set default platform type to Linux.

@@ -52,7 +52,7 @@ enum ApplicationState {
 };
 
 // Returns a human-readable string for the given |state|.
-static inline const char *GetApplicationStateString(ApplicationState state) {
+static inline const char* GetApplicationStateString(ApplicationState state) {
   switch (state) {
     case kApplicationStateStarted:
       return "kApplicationStateStarted";

@@ -22,7 +22,7 @@ namespace cssom {
 typedef struct {
   KeywordValue::Value key;
   scoped_refptr<KeywordValue> value;
-  const char *name;
+  const char* name;
 } Keywords;
 
 TEST(KeywordValueTest, InstancesAndValuesAreConsistent) {

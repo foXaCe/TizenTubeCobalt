@@ -141,11 +141,13 @@ void MixAudioBuffer(const AudioNodeChannelInterpretation& interpretation,
     //
     // output = 0.5 * (input.L + input.R);
     const float kStereoToMonoSpeaker[] = {
-        0.5f, 0.5f,  // 0.5 * L + 0.5 * R
+        0.5f,
+        0.5f,  // 0.5 * L + 0.5 * R
     };
 
     const float kStereoToMonoDiscrete[] = {
-        1.0f, 0.0f,  // 1.0 * L + 0.0 * R
+        1.0f,
+        0.0f,  // 1.0 * L + 0.0 * R
     };
 
     MixAudioBufferBasedOnInterpretation(kStereoToMonoSpeaker,

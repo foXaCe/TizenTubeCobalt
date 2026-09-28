@@ -83,7 +83,8 @@ const float kQuadToFivePointOneMatrix[] = {
 
 // 2 -> 1
 const float kStereoToMonoMatrix[] = {
-    0.5f, 0.5f,  // output = 0.5 * (input.L + input.R)
+    0.5f,
+    0.5f,  // output = 0.5 * (input.L + input.R)
 };
 
 // 4 -> 1

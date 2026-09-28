@@ -122,7 +122,8 @@ AAsset* OpenAndroidAsset(const char* path) {
     return NULL;
   }
   const char* asset_path = path + strlen(g_app_assets_dir) + 1;
-  AAsset* result = AAssetManager_open(g_asset_manager, asset_path, AASSET_MODE_RANDOM);
+  AAsset* result =
+      AAssetManager_open(g_asset_manager, asset_path, AASSET_MODE_RANDOM);
   if (!result) {
     errno = ENOENT;
   }

@@ -57,9 +57,9 @@ class CSSRule : public script::Wrappable,
   virtual Type type() const = 0;
 
   virtual std::string css_text(
-      script::ExceptionState *exception_state) const = 0;
-  virtual void set_css_text(const std::string &css_text,
-                            script::ExceptionState *exception_state) = 0;
+      script::ExceptionState* exception_state) const = 0;
+  virtual void set_css_text(const std::string& css_text,
+                            script::ExceptionState* exception_state) = 0;
 
   scoped_refptr<CSSRule> parent_rule() const;
 
@@ -67,9 +67,9 @@ class CSSRule : public script::Wrappable,
 
   // Custom, not in any spec.
   //
-  void set_parent_rule(CSSRule *parent_rule);
+  void set_parent_rule(CSSRule* parent_rule);
 
-  void set_parent_style_sheet(CSSStyleSheet *parent_style_sheet);
+  void set_parent_style_sheet(CSSStyleSheet* parent_style_sheet);
 
   int index() const { return index_; }
 
@@ -83,10 +83,10 @@ class CSSRule : public script::Wrappable,
   // rule is represented as an index within all its parents.
   virtual int IndexWidth() const { return 1; }
 
-  virtual void Accept(CSSRuleVisitor *visitor) = 0;
-  virtual void AttachToCSSStyleSheet(CSSStyleSheet *style_sheet) = 0;
-  virtual CSSStyleRule *AsCSSStyleRule() { return NULL; }
-  virtual CSSMediaRule *AsCSSMediaRule() { return NULL; }
+  virtual void Accept(CSSRuleVisitor* visitor) = 0;
+  virtual void AttachToCSSStyleSheet(CSSStyleSheet* style_sheet) = 0;
+  virtual CSSStyleRule* AsCSSStyleRule() { return NULL; }
+  virtual CSSMediaRule* AsCSSMediaRule() { return NULL; }
 
   DEFINE_WRAPPABLE_TYPE(CSSRule);
 

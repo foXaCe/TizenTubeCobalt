@@ -20,7 +20,8 @@
 
 #ifdef __cplusplus
 #define _INITIALIZER \
-  {}
+  {                  \
+  }
 #else
 #define _INITIALIZER {0}
 #endif

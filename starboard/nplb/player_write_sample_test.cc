@@ -18,10 +18,10 @@
 #include "starboard/nplb/player_test_fixture.h"
 #include "starboard/nplb/player_test_util.h"
 #include "starboard/nplb/posix_compliance/posix_thread_helpers.h"
+#include "starboard/nplb/testcase_helpers.h"
 #include "starboard/string.h"
 #include "starboard/testing/fake_graphics_context_provider.h"
 #include "testing/gtest/include/gtest/gtest.h"
-#include "starboard/nplb/testcase_helpers.h"
 
 namespace starboard {
 namespace nplb {

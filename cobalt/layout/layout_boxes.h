@@ -32,7 +32,7 @@ class LayoutBoxes : public dom::LayoutBoxes {
  public:
   LayoutBoxes() {}
   explicit LayoutBoxes(Boxes&& boxes) : boxes_(std::move(boxes)) {}
-  ~LayoutBoxes() override{};
+  ~LayoutBoxes() override {};
 
   // From: dom:LayoutBoxes
   //

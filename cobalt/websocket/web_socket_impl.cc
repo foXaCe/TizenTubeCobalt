@@ -34,8 +34,8 @@
 namespace cobalt {
 namespace websocket {
 
-WebSocketImpl::WebSocketImpl(cobalt::network::NetworkModule *network_module,
-                             WebSocket *delegate)
+WebSocketImpl::WebSocketImpl(cobalt::network::NetworkModule* network_module,
+                             WebSocket* delegate)
     : network_module_(network_module), delegate_(delegate) {
   DCHECK(base::SequencedTaskRunner::GetCurrentDefault());
   owner_task_runner_ = base::SequencedTaskRunner::GetCurrentDefault();
@@ -50,8 +50,8 @@ void WebSocketImpl::ResetWebSocketEventDelegate() {
                             CloseInfo(net::kWebSocketErrorGoingAway)));
 }
 
-void WebSocketImpl::Connect(const std::string &origin, const GURL &url,
-                            const std::vector<std::string> &sub_protocols) {
+void WebSocketImpl::Connect(const std::string& origin, const GURL& url,
+                            const std::vector<std::string>& sub_protocols) {
   if (!network_module_) {
     DLOG(WARNING) << "Trying to make web socket connection without network "
                      "module, aborting.";
@@ -88,7 +88,7 @@ void WebSocketImpl::Connect(const std::string &origin, const GURL &url,
 
 void WebSocketImpl::DoConnect(
     scoped_refptr<cobalt::network::URLRequestContextGetter> context,
-    const GURL &url, base::WaitableEvent *channel_created_event) {
+    const GURL& url, base::WaitableEvent* channel_created_event) {
   DCHECK(delegate_task_runner_->RunsTasksInCurrentSequence());
   DCHECK(url.is_valid());
   DCHECK(channel_created_event);
@@ -110,13 +110,13 @@ void WebSocketImpl::DoConnect(
 }
 
 void WebSocketImpl::Close(const net::WebSocketError code,
-                          const std::string &reason) {
+                          const std::string& reason) {
   CloseInfo close_info(code, reason);
   delegate_task_runner_->PostTask(
       FROM_HERE, base::Bind(&WebSocketImpl::DoClose, this, close_info));
 }
 
-void WebSocketImpl::DoClose(const CloseInfo &close_info) {
+void WebSocketImpl::DoClose(const CloseInfo& close_info) {
   if (!websocket_channel_) {
     return;
   }
@@ -144,7 +144,7 @@ WebSocketImpl::~WebSocketImpl() {
 // The main reason to call TrampolineClose is to ensure messages that are posted
 // from this thread prior to this function call are processed before the
 // connection is closed.
-void WebSocketImpl::TrampolineClose(const CloseInfo &close_info) {
+void WebSocketImpl::TrampolineClose(const CloseInfo& close_info) {
   base::Closure no_op_closure =
       base::Closure(base::Bind([]() {} /*Do nothing*/));
 
@@ -155,7 +155,7 @@ void WebSocketImpl::TrampolineClose(const CloseInfo &close_info) {
 }
 
 void WebSocketImpl::OnHandshakeComplete(
-    const std::string &selected_subprotocol) {
+    const std::string& selected_subprotocol) {
   if (websocket_channel_->ReadFrames() !=
       net::WebSocketChannel::CHANNEL_ALIVE) {
     LOG(ERROR) << "Channel is closed before reading completes.";
@@ -166,7 +166,7 @@ void WebSocketImpl::OnHandshakeComplete(
 }
 
 void WebSocketImpl::OnWebSocketConnected(
-    const std::string &selected_subprotocol) {
+    const std::string& selected_subprotocol) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 
   if (delegate_) {
@@ -175,7 +175,7 @@ void WebSocketImpl::OnWebSocketConnected(
 }
 
 void WebSocketImpl::OnWebSocketDisconnected(bool was_clean, uint16 code,
-                                            const std::string &reason) {
+                                            const std::string& reason) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   if (delegate_) {
     delegate_->OnDisconnected(was_clean, code, reason);
@@ -198,7 +198,7 @@ void WebSocketImpl::OnWebSocketReceivedData(
 }
 
 void WebSocketImpl::OnClose(bool was_clean, int error_code,
-                            const std::string &close_reason) {
+                            const std::string& close_reason) {
   DCHECK(delegate_task_runner_->RunsTasksInCurrentSequence());
 
   std::uint16_t close_code = static_cast<std::uint16_t>(error_code);
@@ -235,8 +235,8 @@ void WebSocketImpl::OnWebSocketWriteDone(uint64_t bytes_written) {
 // is legacy code, as SPDY is not used in Cobalt.
 
 bool WebSocketImpl::SendHelper(const net::WebSocketFrameHeader::OpCode op_code,
-                               const char *data, std::size_t length,
-                               std::string *error_message) {
+                               const char* data, std::size_t length,
+                               std::string* error_message) {
   scoped_refptr<net::IOBuffer> io_buffer(new net::IOBuffer(length));
   memcpy(io_buffer->data(), data, length);
 
@@ -270,8 +270,8 @@ void WebSocketImpl::SendOnDelegateThread(
   }
 }
 
-bool WebSocketImpl::SendText(const char *data, std::size_t length,
-                             int *buffered_amount, std::string *error_message) {
+bool WebSocketImpl::SendText(const char* data, std::size_t length,
+                             int* buffered_amount, std::string* error_message) {
   DCHECK(error_message);
   DCHECK(error_message->empty());
   error_message->clear();
@@ -282,9 +282,9 @@ bool WebSocketImpl::SendText(const char *data, std::size_t length,
                     error_message);
 }
 
-bool WebSocketImpl::SendBinary(const char *data, std::size_t length,
-                               int *buffered_amount,
-                               std::string *error_message) {
+bool WebSocketImpl::SendBinary(const char* data, std::size_t length,
+                               int* buffered_amount,
+                               std::string* error_message) {
   DCHECK(error_message);
   DCHECK(error_message->empty());
   error_message->clear();

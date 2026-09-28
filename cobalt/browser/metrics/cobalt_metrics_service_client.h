@@ -46,7 +46,7 @@ class MetricsService;
 // to support the metric's service.
 class CobaltMetricsServiceClient : public ::metrics::MetricsServiceClient {
  public:
-  ~CobaltMetricsServiceClient() override{};
+  ~CobaltMetricsServiceClient() override {};
 
   // Set event dispatcher to be used to publish any metrics events (eg upload).
   void SetEventDispatcher(const base::EventDispatcher* event_dispatcher);

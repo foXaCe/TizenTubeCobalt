@@ -805,7 +805,10 @@ ref class Direct3DApplicationSource sealed : IFrameworkViewSource {
       : application_start_time_{start_time} {}
   virtual IFrameworkView ^ CreateView() {
     return ref new App(application_start_time_);
-  } private : int64_t application_start_time_;
+  }
+
+ private:
+  int64_t application_start_time_;
 };
 
 namespace shared {

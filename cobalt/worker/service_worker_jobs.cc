@@ -85,8 +85,8 @@ bool IsOriginPotentiallyTrustworthy(const GURL& url) {
   // authenticated, return "Potentially Trustworthy".
   if (url.SchemeIs("h5vcc-embedded")) return true;
 
-    // 8. If origin has been configured as a trustworthy origin, return
-    // "Potentially Trustworthy".
+  // 8. If origin has been configured as a trustworthy origin, return
+  // "Potentially Trustworthy".
 #if !defined(COBALT_BUILD_TYPE_GOLD)
   const base::CommandLine& command_line =
       *base::CommandLine::ForCurrentProcess();

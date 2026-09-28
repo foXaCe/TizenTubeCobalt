@@ -101,7 +101,7 @@ TEST_F(TextDecoderTest, DecodeUTF8) {
 
   std::string want;
   std::vector<uint8> data;
-  for (const auto &test : tests) {
+  for (const auto& test : tests) {
     std::tie(data, want) = test;
     script::Handle<script::ArrayBuffer> array_buffer = script::ArrayBuffer::New(
         stub_window_.global_environment(), data.data(), data.size());
@@ -131,7 +131,7 @@ TEST_F(TextDecoderTest, DecodeUTF8Surrogates) {
 
   std::string want;
   std::vector<uint8> data;
-  for (const auto &test : tests) {
+  for (const auto& test : tests) {
     std::tie(data, want) = test;
     script::Handle<script::ArrayBuffer> array_buffer = script::ArrayBuffer::New(
         stub_window_.global_environment(), data.data(), data.size());
@@ -191,7 +191,7 @@ TEST_F(TextDecoderTest, DecodeUTF8Fatal) {
   std::vector<uint8> input;
   TextDecoderOptions options;
   options.set_fatal(true);
-  for (const auto &test : tests) {
+  for (const auto& test : tests) {
     std::tie(label, input) = test;
     // No errors expected while constructing the object.
     EXPECT_CALL(exception_state_,
@@ -225,7 +225,7 @@ TEST_F(TextDecoderTest, DecodeIgnoreBOM) {
   std::vector<uint8> data;
   TextDecoderOptions options;
 
-  for (const auto &test : tests) {
+  for (const auto& test : tests) {
     std::tie(label, data) = test;
     {  // BOM should be present in decoded string if ignored.
       options.set_ignore_bom(true);
@@ -310,7 +310,7 @@ TEST_F(TextDecoderTest, DecodeUTFStreamSimple) {
   TextDecodeOptions stream_option;
   stream_option.set_stream(true);
   for (int chunk_size = 1; chunk_size <= 1; ++chunk_size) {
-    for (const auto &test : tests) {
+    for (const auto& test : tests) {
       std::tie(encoding_label, data) = test;
       EXPECT_CALL(exception_state_,
                   SetSimpleExceptionVA(script::kRangeError, _, _))
@@ -354,7 +354,7 @@ TEST_F(TextDecoderTest, DecodeUTF16) {
 
   std::string want;
   std::vector<uint8> data;
-  for (const auto &test : tests) {
+  for (const auto& test : tests) {
     std::tie(data, want) = test;
     script::Handle<script::ArrayBuffer> array_buffer = script::ArrayBuffer::New(
         stub_window_.global_environment(), data.data(), data.size());
@@ -378,7 +378,7 @@ TEST_F(TextDecoderTest, DecodeUTF16BE) {
 
   std::string want;
   std::vector<uint8> data;
-  for (const auto &test : tests) {
+  for (const auto& test : tests) {
     std::tie(data, want) = test;
     script::Handle<script::ArrayBuffer> array_buffer = script::ArrayBuffer::New(
         stub_window_.global_environment(), data.data(), data.size());

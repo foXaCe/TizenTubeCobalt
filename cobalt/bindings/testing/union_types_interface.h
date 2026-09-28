@@ -45,27 +45,27 @@ class UnionTypesInterface : public script::Wrappable {
       script::UnionType2<DerivedDictionary, scoped_refptr<ArbitraryInterface>>;
 
   MOCK_METHOD0(union_property, UnionPropertyType());
-  MOCK_METHOD1(set_union_property, void(const UnionPropertyType &));
+  MOCK_METHOD1(set_union_property, void(const UnionPropertyType&));
 
   MOCK_METHOD0(union_with_nullable_member_property,
                NullableUnionPropertyType());
   MOCK_METHOD1(set_union_with_nullable_member_property,
-               void(const NullableUnionPropertyType &));
+               void(const NullableUnionPropertyType&));
 
   MOCK_METHOD0(nullable_union_property, NullableUnionPropertyType());
   MOCK_METHOD1(set_nullable_union_property,
-               void(const NullableUnionPropertyType &));
+               void(const NullableUnionPropertyType&));
 
   MOCK_METHOD0(union_base_property, UnionBasePropertyType());
-  MOCK_METHOD1(set_union_base_property, void(const UnionBasePropertyType &));
+  MOCK_METHOD1(set_union_base_property, void(const UnionBasePropertyType&));
 
   MOCK_METHOD0(union_with_dictionary_property, UnionDictPropertyType());
   MOCK_METHOD1(set_union_with_dictionary_property,
-               void(const UnionDictPropertyType &));
+               void(const UnionDictPropertyType&));
 
   MOCK_METHOD0(union_dicts_objects_property, UnionObjectsPropertyType());
   MOCK_METHOD1(set_union_dicts_objects_property,
-               void(const UnionObjectsPropertyType &));
+               void(const UnionObjectsPropertyType&));
 
   DEFINE_WRAPPABLE_TYPE(UnionTypesInterface);
 };

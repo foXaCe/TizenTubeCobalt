@@ -48,7 +48,8 @@ typedef union SbConditionVariable {
 
 #ifdef __cplusplus
 #define SB_CONDITION_VARIABLE_INITIALIZER \
-  {}
+  {                                       \
+  }
 #else
 #define SB_CONDITION_VARIABLE_INITIALIZER {0}
 #endif
