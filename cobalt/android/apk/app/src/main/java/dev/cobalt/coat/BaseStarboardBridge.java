@@ -1105,7 +1105,7 @@ public class BaseStarboardBridge {
         out.flush();
         success = true;
       } catch (Exception e) {
-        Log.e(TAG, "Failed to download APK from " + url, e);
+        Log.e(TAG, "Failed to download APK from %s", url, e);
       }
       if (success) {
         mainHandler.post(() -> {
