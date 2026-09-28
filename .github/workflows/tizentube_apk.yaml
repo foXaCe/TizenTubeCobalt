@@ -1,7 +1,8 @@
 # Builds the TizenTube Cobalt APK on GitHub-hosted runners.
 #
 # A full build does not fit in the 6 h job limit. Each run compiles for up to
-# 5 h 30, keeps the sccache cache, and stops; re-run the workflow until the
+# 4 h 40, saves the sccache cache (even on failure), and stops; re-run the
+# workflow until the
 # APK artifact appears.
 #
 # The APK is signed with the TIZENTUBE_KEYSTORE_B64 secret. When
@@ -78,7 +79,7 @@ jobs:
           sccache --version
 
       - name: Restore sccache
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: ~/.cache/sccache
           key: sccache-${{ env.PLATFORM }}-${{ env.CONFIG }}-${{ github.run_id }}-${{ github.run_attempt }}
@@ -140,6 +141,13 @@ jobs:
           fi
           echo "complete=true" >> "${GITHUB_OUTPUT}"
           ls -la "out/${PLATFORM}_${CONFIG}/apks/"
+
+      - name: Save sccache
+        if: always() && steps.ninja.outcome != 'skipped'
+        uses: actions/cache/save@v4
+        with:
+          path: ~/.cache/sccache
+          key: sccache-${{ env.PLATFORM }}-${{ env.CONFIG }}-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Upload APK
         if: steps.ninja.outputs.complete == 'true'
