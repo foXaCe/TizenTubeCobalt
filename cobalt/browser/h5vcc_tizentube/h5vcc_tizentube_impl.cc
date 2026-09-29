@@ -51,9 +51,9 @@ void H5vccTizentubeImpl::InstallAppFromURL(const std::string& url, InstallAppFro
     JNIEnv* env = AttachCurrentThread();
     bool result = StarboardBridge::GetInstance()->InstallAppFromURL(env, url.c_str());
     std::move(callback).Run(result);
-    return;
+  #else
+    std::move(callback).Run(false);
   #endif  // BUILDFLAG(IS_ANDROID)
-  std::move(callback).Run(false); // Placeholder implementation
 }
 
 void H5vccTizentubeImpl::GetVersion(GetVersionCallback callback) {
@@ -62,9 +62,9 @@ void H5vccTizentubeImpl::GetVersion(GetVersionCallback callback) {
     JNIEnv* env = AttachCurrentThread();
     std::string version = StarboardBridge::GetInstance()->GetVersion(env);
     std::move(callback).Run(version);
-    return;
+  #else
+    std::move(callback).Run("1.0.0");
   #endif  // BUILDFLAG(IS_ANDROID)
-  std::move(callback).Run("1.0.0"); // Placeholder implementation
 }
 
 void H5vccTizentubeImpl::GetArchitecture(GetArchitectureCallback callback) {
@@ -73,9 +73,9 @@ void H5vccTizentubeImpl::GetArchitecture(GetArchitectureCallback callback) {
     JNIEnv* env = AttachCurrentThread();
     std::string architecture = StarboardBridge::GetInstance()->GetArchitecture(env);
     std::move(callback).Run(architecture);
-    return;
+  #else
+    std::move(callback).Run("x86_64");
   #endif  // BUILDFLAG(IS_ANDROID)
-  std::move(callback).Run("x86_64"); // Placeholder implementation
 }
 
 void H5vccTizentubeImpl::GetBrandAndModel(GetBrandAndModelCallback callback) {
@@ -84,9 +84,9 @@ void H5vccTizentubeImpl::GetBrandAndModel(GetBrandAndModelCallback callback) {
     JNIEnv* env = AttachCurrentThread();
     std::string brand_and_model = StarboardBridge::GetInstance()->GetBrandAndModel(env);
     std::move(callback).Run(brand_and_model);
-    return;
+  #else
+    std::move(callback).Run("Example Brand Example Model");
   #endif  // BUILDFLAG(IS_ANDROID)
-  std::move(callback).Run("Example Brand Example Model"); // Placeholder implementation
 }
 
 void H5vccTizentubeImpl::SetFrameRate(float frame_rate) {
